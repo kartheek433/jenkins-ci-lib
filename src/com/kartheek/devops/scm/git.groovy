@@ -24,7 +24,7 @@ def gitCheckout()
        {
           error "\u001B[41m[ERROR] unable to get Git Branch name...."
        } 
-       
+       wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {
           CREDENTIAL_ID = 'git-credentials'
           println "\u001B[32m[INFO] checking out from branch ${BRANCH}, please wait..."          
 		  checkout scm
@@ -32,18 +32,17 @@ def gitCheckout()
           env.GIT_URL = "$REPOSITORY"
           env.GIT_COMMIT = getGitCommitHash()
           env.GIT_AUTHOR_EMAIL = getCommitAuthorEmail()
-		  
-		  println "COMMIT : ${GIT_COMMIT}"
-		  println "EMAIL : ${GIT_AUTHOR_EMAIL}"
+
+	   }
 		  
        
 	   currentBuild.result = 'SUCCESS'
    }
    catch (error) {
-       
+       wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {
           print "\u001B[41m[ERROR] clone for repository ${env.GIT_URL} failed, please check the logs..."
           throw error
-
+	   }
 	   currentBuild.result = 'FAILED'
    }   
 }
@@ -61,9 +60,10 @@ def getGitCommitHash()
    }
    catch (Exception error)
    {
+       wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {      
 		print "\u001B[41m[ERROR] failed to get last Git commit ID....."
         throw error
-     
+	   }     
    }
 }
 
@@ -74,14 +74,16 @@ def getCommitAuthorEmail()
 {
    try {
      def COMMIT = getGitCommitHash()
-     bat "git --no-pager show -s --format='%ae' $COMMIT | sort > author"
+     bat "git --no-pager show -s --format='%%ae' $COMMIT | sort > author"
      def author = readFile('author').trim()
      return author
    }
    catch (Exception error)
    {     
+       wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) { 
 		print "\u001B[41m[ERROR] failed to get the last Git commit author email ID....."
-        throw error     
+        throw error 
+	   }		
    }
 }
 

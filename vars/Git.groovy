@@ -13,8 +13,10 @@ def call(body)
    }
    catch (Exception error)
    {  
+	  wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) { 
 		echo "\u001B[41m[ERROR] ${error}"
-        throw error      
+        throw error   
+	  }
    }
 }
 
