@@ -53,9 +53,10 @@ def gitCheckout()
 def getGitCommitHash()
 {
    try {
-     //gitCommit = bat(returnStdout: true, script: 'git rev-parse HEAD').trim()
-	 gitCommit = bat "git rev-parse HEAD > commit"
-	 shortCommit = readFile('commit').trim().take(8)
+     gitCommit = bat(returnStdout: true, script: 'git rev-parse HEAD').trim()
+	 shortCommit = gitCommit.take(8)
+	 //gitCommit = bat "git rev-parse HEAD > commit"
+	 //shortCommit = readFile('commit').trim().take(8)
 	 println "Commit : ${shortCommit}"
      return shortCommit	 
    }
