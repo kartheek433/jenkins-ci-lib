@@ -10,6 +10,9 @@ def call(body)
    try {
       def scm = new git()	  
       scm.gitCheckout()
+	  
+	  echo "COM : ${env.GIT_COMMIT}"
+	  bat "set > set_Git_main"
    }
    catch (Exception error)
    {  

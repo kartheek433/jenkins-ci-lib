@@ -24,17 +24,17 @@ def gitCheckout()
        {
           error "\u001B[41m[ERROR] unable to get Git Branch name...."
        } 
-       wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {
-          CREDENTIAL_ID = 'git-credentials'
+       wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {          
           println "\u001B[32m[INFO] checking out from branch ${BRANCH}, please wait..."          
 		  checkout scm
           env.GIT_BRANCH = "${BRANCH}"
-          env.GIT_URL = "$REPOSITORY"
+          env.GIT_URL = "${REPOSITORY}"
           env.GIT_COMMIT = getGitCommitHash()
           env.GIT_AUTHOR_EMAIL = getCommitAuthorEmail()
 
-	   }
-		  
+		  bat "set > set_git"
+
+	   }		  
        
 	   currentBuild.result = 'SUCCESS'
    }
@@ -54,8 +54,7 @@ def getGitCommitHash()
 {
    try {
 	 gitCommit = bat "git rev-parse HEAD > commit"
-	 shortCommit = readFile('commit').trim().take(8)
-	 println "Commit : ${shortCommit}"
+	 shortCommit = readFile('commit').trim().take(8)	 
      return shortCommit	 
    }
    catch (Exception error)
@@ -73,7 +72,8 @@ def getGitCommitHash()
 def getCommitAuthorEmail()
 {
    try {
-     def COMMIT = getGitCommitHash()
+     //def COMMIT = getGitCommitHash()
+	 def COMMIT = GIT_COMMIT ?: getGitCommitHash()
      bat "git --no-pager show -s --format='%%ae' $COMMIT | sort > author"
      def author = readFile('author').trim()
      return author
