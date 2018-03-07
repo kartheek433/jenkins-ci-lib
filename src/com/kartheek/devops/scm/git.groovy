@@ -31,9 +31,10 @@ def gitCheckout()
           env.GIT_BRANCH = "${BRANCH}"
           env.GIT_URL = "$REPOSITORY"
           env.GIT_COMMIT = getGitCommitHash()
-          //env.GIT_AUTHOR_EMAIL = getCommitAuthorEmail()
+          env.GIT_AUTHOR_EMAIL = getCommitAuthorEmail()
 		  
 		  println "COMMIT : ${GIT_COMMIT}"
+		  println "EMAIL : ${GIT_AUTHOR_EMAIL}"
 		  
        
 	   currentBuild.result = 'SUCCESS'
@@ -53,10 +54,8 @@ def gitCheckout()
 def getGitCommitHash()
 {
    try {
-     gitCommit = bat(returnStdout: true, script: 'git rev-parse HEAD').trim()
-	 shortCommit = gitCommit.take(8)
-	 //gitCommit = bat "git rev-parse HEAD > commit"
-	 //shortCommit = readFile('commit').trim().take(8)
+	 gitCommit = bat "git rev-parse HEAD > commit"
+	 shortCommit = readFile('commit').trim().take(8)
 	 println "Commit : ${shortCommit}"
      return shortCommit	 
    }
@@ -75,7 +74,7 @@ def getCommitAuthorEmail()
 {
    try {
      def COMMIT = getGitCommitHash()
-     bat "git log --format='%ae' $COMMIT | sort > author"
+     bat "git --no-pager show -s --format='%ae' $COMMIT | sort > author"
      def author = readFile('author').trim()
      return author
    }
