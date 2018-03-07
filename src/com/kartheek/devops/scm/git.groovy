@@ -30,7 +30,7 @@ def gitCheckout()
 		  checkout scm
           env.GIT_BRANCH = "${BRANCH}"
           env.GIT_URL = "$REPOSITORY"
-          //env.GIT_COMMIT = getGitCommitHash()
+          env.GIT_COMMIT = getGitCommitHash()
           //env.GIT_AUTHOR_EMAIL = getCommitAuthorEmail()
 		  
 		  println "BRANCH : ${GIT_BRANCH}"
@@ -56,6 +56,7 @@ def getGitCommitHash()
      gitCommit = bat(returnStdout: true, script: 'git rev-parse HEAD').trim()
      shortCommit = gitCommit.take(8)
      return shortCommit
+	 println "Commit : ${shortCommit}"
    }
    catch (Exception error)
    {
