@@ -33,8 +33,8 @@ def gitCheckout()
           env.GIT_COMMIT = getGitCommitHash()
           //env.GIT_AUTHOR_EMAIL = getCommitAuthorEmail()
 		  
-		  println "BRANCH : ${GIT_BRANCH}"
-		  println "URL : ${GIT_URL}"
+		  println "COMMIT : ${GIT_COMMIT}"
+		  
        
 	   currentBuild.result = 'SUCCESS'
    }
@@ -56,8 +56,8 @@ def getGitCommitHash()
      //gitCommit = bat(returnStdout: true, script: 'git rev-parse HEAD').trim()
 	 gitCommit = bat "git rev-parse HEAD > commit"
 	 shortCommit = readFile('commit').trim().take(8)
-     return shortCommit
 	 println "Commit : ${shortCommit}"
+     return shortCommit	 
    }
    catch (Exception error)
    {
