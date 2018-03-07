@@ -26,13 +26,15 @@ def gitCheckout()
        } 
        
           CREDENTIAL_ID = 'git-credentials'
-          println "\u001B[32m[INFO] checking out from branch ${BRANCH}, please wait..."
-          // checkout([$class: 'GitSCM', branches: [[name: "${BRANCH}"]], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CloneOption', noTags: false, reference: '', shallow: true]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: "${CREDENTIAL_ID}", url: "${REPOSITORY}"]]])
+          println "\u001B[32m[INFO] checking out from branch ${BRANCH}, please wait..."          
 		  checkout scm
           env.GIT_BRANCH = "${BRANCH}"
           env.GIT_URL = "$REPOSITORY"
-          env.GIT_COMMIT = getGitCommitHash()
-          env.GIT_AUTHOR_EMAIL = getCommitAuthorEmail()
+          //env.GIT_COMMIT = getGitCommitHash()
+          //env.GIT_AUTHOR_EMAIL = getCommitAuthorEmail()
+		  
+		  println "BRANCH : ${GIT_BRANCH}"
+		  println "URL : ${GIT_URL}"
        
 	   currentBuild.result = 'SUCCESS'
    }
