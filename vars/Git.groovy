@@ -12,13 +12,10 @@ def call(body)
       scm.gitCheckout()
    }
    catch (Exception error)
-   {
-      wrap([$class: 'AnsiColorBuildWrapper']) {
-         echo "\u001B[41m[ERROR] ${error}"
-         throw error
-      }
+   {  
+		echo "\u001B[41m[ERROR] ${error}"
+        throw error      
    }
-
 }
 
 
